@@ -27,6 +27,11 @@ function initializeTransitionScreen() {
     sessionStorage.setItem('hasVisitedInlighnTech', 'true');
     
     if (transitionScreen) {
+        // Ensure transition screen is visible initially
+        transitionScreen.style.display = 'flex';
+        transitionScreen.style.opacity = '1';
+        document.body.style.overflow = 'hidden';
+        
         // Hide transition screen after a short delay
         setTimeout(() => {
             transitionScreen.style.opacity = '0';

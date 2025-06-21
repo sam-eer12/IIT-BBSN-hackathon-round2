@@ -1756,6 +1756,127 @@ body.pirate-mode .stat {
 }
 
 /* ===========================================
+   SIMPLE TRANSITION SCREEN
+   ========================================= */
+
+.transition-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(0, 31, 63, 0.95), 
+        rgba(0, 116, 217, 0.9), 
+        rgba(127, 219, 255, 0.85),
+        rgba(0, 31, 63, 0.95)
+    );
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    backdrop-filter: blur(10px);
+}
+
+.transition-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.transition-content {
+    text-align: center;
+    color: white;
+    max-width: 500px;
+    padding: 2rem;
+    animation: transitionFadeIn 0.8s ease-out;
+}
+
+.transition-logo {
+    margin-bottom: 2rem;
+}
+
+.transition-logo-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #FFD700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    margin-bottom: 1rem;
+    animation: logoGlow 2s ease-in-out infinite alternate;
+}
+
+.transition-title {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'Cinzel', serif;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+.transition-text {
+    font-size: 1.2rem;
+    color: #E6F3FF;
+    font-weight: 400;
+    animation: fadeInOut 3s ease-in-out infinite;
+}
+
+@keyframes transitionFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes logoGlow {
+    from {
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    }
+    to {
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+    }
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 215, 0, 0.3);
+    }
+    to {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.6);
+    }
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* Responsive Design for Transition Screen */
+@media (max-width: 768px) {
+    .transition-title {
+        font-size: 1.5rem;
+    }
+    
+    .transition-text {
+        font-size: 1rem;
+    }
+    
+    .transition-logo-img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* ===========================================
    OCEAN THEMED LOADING SCREEN
    ========================================= */
 

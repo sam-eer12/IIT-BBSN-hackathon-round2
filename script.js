@@ -689,11 +689,12 @@ function initLoadingScreen() {
     const hasVisited = sessionStorage.getItem('hasVisitedInlighnTech');
     const loadingScreen = document.getElementById('loadingScreen');
     const transitionScreen = document.getElementById('transitionScreen');
-    
-    if (hasVisited && transitionScreen) {
+      if (hasVisited && transitionScreen) {
         // Show simple transition for returning visitors
-        loadingScreen.style.display = 'none';
+        if (loadingScreen) loadingScreen.style.display = 'none';
         transitionScreen.style.display = 'flex';
+        transitionScreen.style.opacity = '1';
+        document.body.style.overflow = 'hidden';
         
         setTimeout(() => {
             transitionScreen.style.opacity = '0';
