@@ -55,6 +55,7 @@ window.addEventListener('DOMContentLoaded', () => {
     setTimeout(animateCounters, 1000);
     initBubbleTrail(); // Initialize bubble trail
     createOceanElements(); // Initialize ocean elements
+    initFollowingShip(); // Initialize following ship
 });
 
 // Mouse bubble trail animation
@@ -332,3 +333,108 @@ document.addEventListener('keydown', (e) => {
         collectTreasure('konami', 1000);
     }
 });
+
+// Ship following mouse feature with cybersecurity quotes
+function initFollowingShip() {
+    // Create the ship element
+    const ship = document.createElement('div');
+    ship.className = 'following-ship';
+    ship.innerHTML = `
+        <img src="ship.png" alt="Pirate Ship" width="80" height="60">
+        <div class="ship-quote"></div>
+    `;
+    document.body.appendChild(ship);
+
+    // Position variables
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = window.innerWidth / 2;
+    let currentY = window.innerHeight / 2;
+    const followDistance = 20; // Distance from cursor
+    let isLeft = true; // To track ship direction
+
+    // Update target position on mouse move
+    document.addEventListener('mousemove', (e) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        
+        // Determine if ship should flip direction
+        if (targetX < currentX && !isLeft) {
+            isLeft = true;
+            ship.classList.add('flip-ship');
+        } else if (targetX > currentX && isLeft) {
+            isLeft = false;
+            ship.classList.remove('flip-ship');
+        }
+    });
+
+    // Cybersecurity quotes
+    const securityQuotes = [
+        "The best defense is a good backup.",
+        "Security is a journey, not a destination.",
+        "Your password should be like your treasure - buried deep and hard to find.",
+        "Pirates plunder treasures, hackers plunder data.",
+        "A ship is safe in harbor, but data isn't safe without encryption.",
+        "Trust is earned, access is granted.",
+        "Every sailor knows to check for leaks, every user should check for data breaches.",
+        "The strongest chain can be broken by its weakest link.",
+        "Even pirates have a code; cybersecurity should be yours.",
+        "Defend your digital treasures like a pirate defends their gold.",
+        "Beware of digital sirens bearing phishing emails.",
+        "A good captain scans the horizon; a good user scans for malware.",
+        "Loose lips sink ships; weak passwords sink security.",
+        "The digital sea is vast and filled with predators.",
+        "Even in calm waters, keep your guard up."
+    ];
+
+    // Function to display random quote
+    function displayRandomQuote() {
+        const quoteElement = ship.querySelector('.ship-quote');
+        const randomQuote = securityQuotes[Math.floor(Math.random() * securityQuotes.length)];
+        
+        // Add the new quote with animation
+        quoteElement.textContent = randomQuote;
+        quoteElement.style.opacity = '1';
+        quoteElement.style.transform = 'translateY(0)';
+        
+        // Hide quote after 5 seconds
+        setTimeout(() => {
+            quoteElement.style.opacity = '0';
+            quoteElement.style.transform = 'translateY(-10px)';
+        }, 5000);
+    }
+
+    // Show quotes every 20 seconds
+    setInterval(displayRandomQuote, 20000);
+    
+    // Show first quote after a short delay
+    setTimeout(displayRandomQuote, 3000);
+
+    // Animate ship position
+    function animateShip() {
+        // Calculate distance to target
+        const dx = targetX - currentX;
+        const dy = targetY - currentY;
+        
+        // Add lag effect by moving a percentage of the distance
+        currentX += dx * 0.05;
+        currentY += dy * 0.05;
+        
+        // Calculate position with offset
+        const angle = Math.atan2(dy, dx);
+        const offsetX = followDistance * Math.cos(angle);
+        const offsetY = followDistance * Math.sin(angle);
+        
+        // Position the ship behind the cursor
+        ship.style.left = `${currentX - offsetX - 40}px`; // 40 is half the ship width
+        ship.style.top = `${currentY - offsetY - 30}px`; // 30 is half the ship height
+        
+        // Add gentle bobbing motion
+        const bobbingY = Math.sin(Date.now() / 500) * 5; // 5px up and down bobbing
+        ship.style.transform = `translateY(${bobbingY}px)`;
+        
+        requestAnimationFrame(animateShip);
+    }
+
+    animateShip();
+}
