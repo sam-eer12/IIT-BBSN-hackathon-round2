@@ -680,7 +680,31 @@ function initTreasureChest() {
 
 // Ocean Loading Screen functionality
 function initLoadingScreen() {
+    // Check if user is returning (has visited before)
+    const hasVisited = sessionStorage.getItem('hasVisitedInlighnTech');
     const loadingScreen = document.getElementById('loadingScreen');
+    const transitionScreen = document.getElementById('transitionScreen');
+    
+    if (hasVisited && transitionScreen) {
+        // Show simple transition for returning visitors
+        loadingScreen.style.display = 'none';
+        transitionScreen.style.display = 'flex';
+        
+        setTimeout(() => {
+            transitionScreen.style.opacity = '0';
+            setTimeout(() => {
+                transitionScreen.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 800);
+        }, 1200);
+        
+        return;
+    }
+    
+    // Mark that user has visited
+    sessionStorage.setItem('hasVisitedInlighnTech', 'true');
+    
+    // Continue with full loading screen for first-time visitors
     const progressFill = document.getElementById('progressFill');
     const progressPercent = document.getElementById('progressPercent');
     const loadingText = document.getElementById('loadingText');
