@@ -60,6 +60,7 @@ window.addEventListener('DOMContentLoaded', () => {
         initFollowingShip(); // Initialize following ship
         initLogoFlip(); // Initialize logo flip animation
         initTreasureChest(); // Initialize treasure chest
+        initVisionGoalsAnimation(); // Initialize vision & goals scroll animations
     }, 4000); // Wait 4 seconds to let loading screen complete
 });
 
@@ -803,3 +804,292 @@ function initLoadingScreen() {
 
 // Initialize loading screen immediately
 initLoadingScreen();
+
+// Vision & Goals Scroll Animation functionality
+function initVisionGoalsAnimation() {
+    console.log('Initializing Vision Goals Animation');
+    
+    // Create duplicate goal cards for seamless infinite loop
+    const goalsTrack = document.getElementById('goals-track');
+    if (goalsTrack) {
+        const goalCards = Array.from(goalsTrack.children);
+        goalCards.forEach(card => {
+            const duplicate = card.cloneNode(true);
+            goalsTrack.appendChild(duplicate);
+        });
+        console.log('Goals cards duplicated for infinite loop');
+    }
+    
+    // Elements to animate
+    const visionHeader = document.querySelector('.vision-header');
+    const goalsHeader = document.querySelector('.goals-header');
+    const visionItems = document.querySelectorAll('.vision-item');
+    
+    console.log(`Found ${visionItems.length} vision items`);
+    console.log('Vision header:', visionHeader);
+    console.log('Goals header:', goalsHeader);
+      // Intersection Observer for vision items with alternating animations
+    const visionObserverOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const visionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const index = Array.from(visionItems).indexOf(entry.target);
+                console.log(`Vision item ${index} is intersecting`); // Debug log
+                
+                // Add slide-in class based on whether it's odd or even
+                if (index % 2 === 0) {
+                    entry.target.classList.add('slide-in-left');
+                } else {
+                    entry.target.classList.add('slide-in-right');
+                }
+            }
+        });
+    }, visionObserverOptions);
+    
+    // Intersection Observer for headers
+    const headerObserverOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const headerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, headerObserverOptions);
+    
+    // Observe elements
+    if (visionHeader) headerObserver.observe(visionHeader);
+    if (goalsHeader) headerObserver.observe(goalsHeader);    // Observe vision items with staggered delays
+    visionItems.forEach((item, index) => {
+        item.style.transitionDelay = `${index * 0.2}s`;
+        visionObserver.observe(item);
+    });
+    
+    // Simple scroll-based animation as backup
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        const windowHeight = window.innerHeight;
+        
+        visionItems.forEach((item, index) => {
+            const itemTop = item.offsetTop;
+            const itemHeight = item.offsetHeight;
+            
+            if (scrollPosition + windowHeight > itemTop + itemHeight / 4) {
+                if (index % 2 === 0) {
+                    item.classList.add('slide-in-left');
+                } else {
+                    item.classList.add('slide-in-right');
+                }
+            }
+        });
+    });
+    
+    // Parallax effect for floating elements
+    let ticking = false;
+    
+    function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const orbs = document.querySelectorAll('.floating-orb');
+        const lines = document.querySelectorAll('.floating-line');
+        
+        orbs.forEach((orb, index) => {
+            const speed = 0.3 + (index * 0.1);
+            const yPos = scrolled * speed;
+            orb.style.transform = `translateY(${yPos}px) rotateZ(${scrolled * 0.01}deg)`;
+        });
+        
+        lines.forEach((line, index) => {
+            const speed = 0.2 + (index * 0.05);
+            const yPos = scrolled * speed;
+            line.style.transform = `translateY(${yPos}px) rotateZ(${scrolled * 0.02}deg)`;
+        });
+        
+        ticking = false;
+    }
+    
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    }
+    
+    window.addEventListener('scroll', requestTick);
+    
+    // Enhanced text reveal animation
+    function revealTextAnimation() {
+        const visionTitle = document.querySelector('.vision-title');
+        const goalsTitle = document.querySelector('.goals-title');
+        
+        [visionTitle, goalsTitle].forEach(title => {
+            if (title) {
+                const text = title.textContent;
+                title.innerHTML = '';
+                
+                // Split into words instead of characters for better effect
+                const words = text.split(' ');
+                words.forEach((word, wordIndex) => {
+                    const wordSpan = document.createElement('span');
+                    wordSpan.style.display = 'inline-block';
+                    wordSpan.style.marginRight = '0.3em';
+                    
+                    word.split('').forEach((char, charIndex) => {
+                        const span = document.createElement('span');
+                        span.textContent = char;
+                        span.style.display = 'inline-block';
+                        span.style.opacity = '0';
+                        span.style.transform = 'translateY(100px) rotateX(90deg)';
+                        span.style.transition = `all 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${(wordIndex * 0.1) + (charIndex * 0.03)}s`;
+                        wordSpan.appendChild(span);
+                    });
+                    
+                    title.appendChild(wordSpan);
+                });
+            }
+        });
+        
+        // Trigger text animation when title comes into view
+        const titleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const spans = entry.target.querySelectorAll('span span');
+                    spans.forEach(span => {
+                        span.style.opacity = '1';
+                        span.style.transform = 'translateY(0) rotateX(0deg)';
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+        
+        if (visionTitle) titleObserver.observe(visionTitle);
+        if (goalsTitle) titleObserver.observe(goalsTitle);
+    }
+    
+    // Enhanced hover effects for vision items
+    function initEnhancedHoverEffects() {
+        visionItems.forEach(item => {
+            const visionIcon = item.querySelector('.vision-icon');
+            const visionNumber = item.querySelector('.vision-number');
+            
+            item.addEventListener('mouseenter', () => {
+                // Add sparkle effect
+                createSparkleEffect(item);
+                
+                // Animate icon and number
+                if (visionIcon) {
+                    visionIcon.style.transform = 'scale(1.3) rotateY(360deg)';
+                    visionIcon.style.filter = 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.8))';
+                }
+                
+                if (visionNumber) {
+                    visionNumber.style.transform = 'scale(1.2)';
+                    visionNumber.style.textShadow = '0 0 20px rgba(255, 215, 0, 0.8)';
+                }
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                if (visionIcon) {
+                    visionIcon.style.transform = 'scale(1) rotateY(0deg)';
+                    visionIcon.style.filter = 'drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3))';
+                }
+                
+                if (visionNumber) {
+                    visionNumber.style.transform = 'scale(1)';
+                    visionNumber.style.textShadow = '2px 2px 4px rgba(0, 0, 0, 0.3)';
+                }
+                
+                // Remove sparkles
+                const sparkles = item.querySelectorAll('.sparkle');
+                sparkles.forEach(sparkle => sparkle.remove());
+            });
+        });
+    }
+    
+    function createSparkleEffect(element) {
+        for (let i = 0; i < 8; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.cssText = `
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: radial-gradient(circle, #FFD700, transparent);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 10;
+                opacity: 0;
+                animation: sparkleAnimation 1.5s ease-out forwards;
+            `;
+            
+            const rect = element.getBoundingClientRect();
+            const x = Math.random() * rect.width;
+            const y = Math.random() * rect.height;
+            
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.animationDelay = (i * 0.1) + 's';
+            
+            element.appendChild(sparkle);
+            
+            // Remove sparkle after animation
+            setTimeout(() => {
+                if (sparkle.parentNode) {
+                    sparkle.parentNode.removeChild(sparkle);
+                }
+            }, 2000);
+        }
+    }
+    
+    // Add sparkle animation keyframes
+    if (!document.getElementById('sparkle-styles')) {
+        const style = document.createElement('style');
+        style.id = 'sparkle-styles';
+        style.textContent = `
+            @keyframes sparkleAnimation {
+                0% {
+                    opacity: 0;
+                    transform: scale(0) rotate(0deg);
+                }
+                50% {
+                    opacity: 1;
+                    transform: scale(1) rotate(180deg);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(0) rotate(360deg);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Initialize all enhancements
+    revealTextAnimation();
+    initEnhancedHoverEffects();
+    
+    // Smooth entry animation for the entire section
+    const visionGoalsSection = document.querySelector('.vision-goals-section');
+    if (visionGoalsSection) {
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        visionGoalsSection.style.opacity = '0';
+        visionGoalsSection.style.transform = 'translateY(50px)';
+        visionGoalsSection.style.transition = 'all 1s ease-out';
+        
+        sectionObserver.observe(visionGoalsSection);
+    }
+}
