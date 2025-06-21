@@ -1210,3 +1210,966 @@ body.pirate-mode .stat {
         transform: translateY(-8px);
     }
 }
+
+/* ===========================================
+   3D INTERACTIVE TREASURE CHEST SECTION
+   ========================================= */
+
+.treasure-section {
+    background: linear-gradient(135deg, 
+        rgba(0, 31, 63, 0.9), 
+        rgba(0, 116, 217, 0.8), 
+        rgba(127, 219, 255, 0.7)
+    );
+    position: relative;
+    overflow: hidden;
+}
+
+.treasure-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.treasure-chest-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    margin-top: 4rem;
+    perspective: 1000px;
+}
+
+/* Treasure Chest Styling */
+.treasure-chest {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    margin: 0 auto;
+}
+
+.treasure-chest:hover {
+    transform: scale(1.05) rotateY(5deg);
+}
+
+.chest-body {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(145deg, #8B4513, #A0522D, #8B4513);
+    border-radius: 15px 15px 25px 25px;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        inset 0 -5px 15px rgba(0, 0, 0, 0.3),
+        inset 0 5px 15px rgba(255, 215, 0, 0.2);
+    border: 3px solid #654321;
+    transform-style: preserve-3d;
+}
+
+.chest-lid {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(145deg, #A0522D, #D2691E, #A0522D);
+    border-radius: 25px 25px 15px 15px;
+    box-shadow: 
+        0 5px 20px rgba(0, 0, 0, 0.3),
+        inset 0 3px 10px rgba(255, 215, 0, 0.3),
+        inset 0 -3px 10px rgba(0, 0, 0, 0.2);
+    border: 3px solid #654321;
+    transform-origin: bottom center;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.treasure-chest.open .chest-lid {
+    transform: rotateX(-120deg) translateZ(10px);
+}
+
+/* Chest Details */
+.chest-lock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 30px;
+    background: linear-gradient(145deg, #FFD700, #FFA500);
+    border-radius: 8px 8px 12px 12px;
+    box-shadow: 
+        0 3px 8px rgba(0, 0, 0, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    border: 2px solid #B8860B;
+}
+
+.chest-lock::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 15px;
+    border: 3px solid #B8860B;
+    border-bottom: none;
+    border-radius: 15px 15px 0 0;
+    background: transparent;
+}
+
+.chest-keyhole {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 25px;
+    height: 25px;
+    background: linear-gradient(145deg, #FFD700, #FFA500);
+    border-radius: 50%;
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.chest-keyhole::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: #654321;
+    border-radius: 50% 50% 50% 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.chest-hinges {
+    position: absolute;
+    top: -5px;
+    width: 100%;
+    height: 10px;
+}
+
+.chest-hinge-left,
+.chest-hinge-right {
+    position: absolute;
+    top: -5px;
+    width: 30px;
+    height: 15px;
+    background: linear-gradient(145deg, #B8860B, #FFD700);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.chest-hinge-left {
+    left: 20px;
+}
+
+.chest-hinge-right {
+    right: 20px;
+}
+
+.chest-corner {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: linear-gradient(145deg, #FFD700, #B8860B);
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.chest-corner-tl { top: 10px; left: 10px; }
+.chest-corner-tr { top: 10px; right: 10px; }
+.chest-corner-bl { bottom: 10px; left: 10px; }
+.chest-corner-br { bottom: 10px; right: 10px; }
+
+/* Customer Coins */
+.customer-coins {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 150px;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.3s;
+    pointer-events: none;
+}
+
+.treasure-chest.open .customer-coins {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.coin {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: all 0.3s ease;
+    animation: coinFloat 3s ease-in-out infinite;
+}
+
+.coin:nth-child(1) { 
+    top: 20px; 
+    left: 30px; 
+    animation-delay: 0s;
+}
+.coin:nth-child(2) { 
+    top: 10px; 
+    left: 100px; 
+    animation-delay: 0.5s;
+}
+.coin:nth-child(3) { 
+    top: 40px; 
+    left: 170px; 
+    animation-delay: 1s;
+}
+.coin:nth-child(4) { 
+    top: 80px; 
+    left: 20px; 
+    animation-delay: 1.5s;
+}
+.coin:nth-child(5) { 
+    top: 90px; 
+    left: 120px; 
+    animation-delay: 2s;
+}
+.coin:nth-child(6) { 
+    top: 70px; 
+    left: 200px; 
+    animation-delay: 2.5s;
+}
+
+.coin:hover {
+    transform: scale(1.3) rotateY(180deg) translateZ(20px);
+    z-index: 10;
+}
+
+.coin-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #FFD700, #FFA500, #FFD700);
+    border: 3px solid #B8860B;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #654321;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.3),
+        inset 0 2px 5px rgba(255, 255, 255, 0.4),
+        inset 0 -2px 5px rgba(0, 0, 0, 0.2);
+    backface-visibility: hidden;
+}
+
+.coin-back {
+    transform: rotateY(180deg);
+    font-size: 1.8rem;
+}
+
+@keyframes coinFloat {
+    0%, 100% { 
+        transform: translateY(0px) rotateZ(0deg); 
+    }
+    50% { 
+        transform: translateY(-10px) rotateZ(5deg); 
+    }
+}
+
+/* Sparkle Effects */
+.sparkles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.treasure-chest.open .sparkles {
+    opacity: 1;
+}
+
+.sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #FFD700;
+    border-radius: 50%;
+    animation: sparkleAnimation 2s ease-in-out infinite;
+    box-shadow: 0 0 10px #FFD700;
+}
+
+.sparkle:nth-child(1) { 
+    top: 30px; 
+    left: 50px; 
+    animation-delay: 0s; 
+}
+.sparkle:nth-child(2) { 
+    top: 60px; 
+    left: 200px; 
+    animation-delay: 0.4s; 
+}
+.sparkle:nth-child(3) { 
+    top: 100px; 
+    left: 80px; 
+    animation-delay: 0.8s; 
+}
+.sparkle:nth-child(4) { 
+    top: 40px; 
+    left: 160px; 
+    animation-delay: 1.2s; 
+}
+.sparkle:nth-child(5) { 
+    top: 80px; 
+    left: 30px; 
+    animation-delay: 1.6s; 
+}
+
+@keyframes sparkleAnimation {
+    0%, 100% { 
+        opacity: 0; 
+        transform: scale(0) rotate(0deg); 
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale(1) rotate(180deg); 
+    }
+}
+
+/* Customer Info Card */
+.customer-info-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 90%;
+    max-width: 500px;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 215, 0, 0.2);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    border: 2px solid #FFD700;
+}
+
+.customer-info-card.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.info-content {
+    padding: 2.5rem;
+    color: #333;
+}
+
+.customer-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #001f3f;
+    margin-bottom: 0.5rem;
+    font-family: 'Cinzel', serif;
+}
+
+.customer-role {
+    font-size: 1.1rem;
+    color: #0074D9;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.customer-story {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+.customer-skills,
+.customer-achievement {
+    margin-bottom: 1.5rem;
+}
+
+.customer-skills h4,
+.customer-achievement h4 {
+    font-size: 1.1rem;
+    color: #001f3f;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.skill-tag {
+    background: linear-gradient(145deg, #FFD700, #FFA500);
+    color: #654321;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.achievement-text {
+    color: #0074D9;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.info-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.info-close:hover {
+    transform: scale(1.1);
+    background: linear-gradient(145deg, #ee5a52, #ff6b6b);
+}
+
+/* ===========================================
+   OCEAN THEMED LOADING SCREEN
+   ========================================= */
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, 
+        #87CEEB 0%,     /* Sky blue */
+        #4682B4 30%,    /* Steel blue */
+        #1e3a8a 70%,    /* Deep blue */
+        #0c1e4a 100%    /* Navy blue */
+    );
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loading-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.ocean-loading-bg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Animated Ocean Waves */
+.wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%23ffffff'%3E%3C/path%3E%3C/svg%3E") repeat-x;
+    animation: waveMove 20s ease-in-out infinite;
+    opacity: 0.8;
+}
+
+.wave-1 {
+    animation-delay: 0s;
+    z-index: 4;
+    opacity: 0.7;
+    background-size: 1200px 120px;
+}
+
+.wave-2 {
+    animation-delay: -5s;
+    z-index: 3;
+    opacity: 0.5;
+    background-size: 1400px 140px;
+    height: 120px;
+}
+
+.wave-3 {
+    animation-delay: -10s;
+    z-index: 2;
+    opacity: 0.3;
+    background-size: 1600px 160px;
+    height: 140px;
+}
+
+.wave-4 {
+    animation-delay: -15s;
+    z-index: 1;
+    opacity: 0.2;
+    background-size: 1800px 180px;
+    height: 160px;
+}
+
+@keyframes waveMove {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-25%); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Loading Content */
+.loading-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    color: white;
+    max-width: 500px;
+    padding: 2rem;
+}
+
+/* Sailing Ship Animation */
+.loading-ship {
+    position: relative;
+    margin-bottom: 3rem;
+    animation: shipBob 3s ease-in-out infinite;
+}
+
+.ship-svg {
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+}
+
+.ship-wake {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 30px;
+}
+
+.wake-line {
+    position: absolute;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 2px;
+    animation: wakeAnimation 2s ease-out infinite;
+}
+
+.wake-line-1 {
+    width: 60px;
+    top: 10px;
+    right: 20px;
+    animation-delay: 0s;
+}
+
+.wake-line-2 {
+    width: 80px;
+    top: 15px;
+    right: 10px;
+    animation-delay: 0.3s;
+}
+
+.wake-line-3 {
+    width: 100px;
+    top: 20px;
+    right: 0px;
+    animation-delay: 0.6s;
+}
+
+@keyframes shipBob {
+    0%, 100% { transform: translateY(0px) rotate(-1deg); }
+    50% { transform: translateY(-15px) rotate(1deg); }
+}
+
+@keyframes wakeAnimation {
+    0% { opacity: 0.8; transform: scaleX(1); }
+    100% { opacity: 0; transform: scaleX(2); }
+}
+
+/* Loading Text */
+.loading-text-container {
+    margin-bottom: 2rem;
+}
+
+.loading-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-family: 'Cinzel', serif;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+.loading-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #E6F3FF;
+    font-weight: 400;
+    animation: fadeInOut 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 215, 0, 0.3); }
+    100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.6); }
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* Treasure Chest Progress Bar */
+.treasure-progress {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.treasure-chest-mini {
+    position: relative;
+    width: 40px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.mini-chest-body {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 18px;
+    background: linear-gradient(145deg, #8B4513, #A0522D);
+    border-radius: 8px 8px 12px 12px;
+    border: 2px solid #654321;
+}
+
+.mini-chest-lid {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 15px;
+    background: linear-gradient(145deg, #A0522D, #D2691E);
+    border-radius: 12px 12px 8px 8px;
+    border: 2px solid #654321;
+    transform-origin: bottom center;
+    animation: miniChestOpen 4s ease-in-out infinite;
+}
+
+@keyframes miniChestOpen {
+    0%, 70% { transform: rotateX(0deg); }
+    85%, 95% { transform: rotateX(-45deg); }
+    100% { transform: rotateX(0deg); }
+}
+
+.progress-bar {
+    position: relative;
+    flex: 1;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, 
+        #FFD700 0%, 
+        #FFA500 25%, 
+        #FFD700 50%, 
+        #FF8C00 75%, 
+        #FFD700 100%
+    );
+    border-radius: 25px;
+    width: 0%;
+    transition: width 0.3s ease;
+    background-size: 200% 100%;
+    animation: goldShimmer 2s linear infinite;
+}
+
+@keyframes goldShimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.progress-coins {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 10px;
+}
+
+.progress-coin {
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(145deg, #FFD700, #FFA500);
+    border-radius: 50%;
+    border: 1px solid #B8860B;
+    transform: scale(0);
+    animation: coinPop 0.5s ease-out forwards;
+}
+
+.progress-coin:nth-child(1) { animation-delay: 1s; }
+.progress-coin:nth-child(2) { animation-delay: 2s; }
+.progress-coin:nth-child(3) { animation-delay: 3s; }
+.progress-coin:nth-child(4) { animation-delay: 4s; }
+.progress-coin:nth-child(5) { animation-delay: 5s; }
+
+@keyframes coinPop {
+    0% { transform: scale(0) rotate(0deg); }
+    50% { transform: scale(1.3) rotate(180deg); }
+    100% { transform: scale(1) rotate(360deg); }
+}
+
+.progress-text {
+    color: #FFD700;
+    font-weight: 700;
+    font-size: 1.1rem;
+    min-width: 50px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Loading Bubbles */
+.loading-bubbles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.loading-bubble {
+    position: absolute;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(173, 216, 230, 0.4));
+    border-radius: 50%;
+    animation: bubbleFloat 6s ease-in-out infinite;
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.8),
+        0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.loading-bubble:nth-child(1) {
+    width: 20px;
+    height: 20px;
+    left: 10%;
+    bottom: -50px;
+    animation-delay: 0s;
+    animation-duration: 8s;
+}
+
+.loading-bubble:nth-child(2) {
+    width: 15px;
+    height: 15px;
+    left: 20%;
+    bottom: -50px;
+    animation-delay: 1s;
+    animation-duration: 7s;
+}
+
+.loading-bubble:nth-child(3) {
+    width: 25px;
+    height: 25px;
+    right: 15%;
+    bottom: -50px;
+    animation-delay: 2s;
+    animation-duration: 9s;
+}
+
+.loading-bubble:nth-child(4) {
+    width: 12px;
+    height: 12px;
+    right: 25%;
+    bottom: -50px;
+    animation-delay: 3s;
+    animation-duration: 6s;
+}
+
+.loading-bubble:nth-child(5) {
+    width: 18px;
+    height: 18px;
+    left: 50%;
+    bottom: -50px;
+    animation-delay: 4s;
+    animation-duration: 10s;
+}
+
+.loading-bubble:nth-child(6) {
+    width: 22px;
+    height: 22px;
+    right: 35%;
+    bottom: -50px;
+    animation-delay: 5s;
+    animation-duration: 8s;
+}
+
+@keyframes bubbleFloat {
+    0% {
+        transform: translateY(0) translateX(0) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(-10vh) translateX(0) scale(1);
+    }
+    50% {
+        transform: translateY(-50vh) translateX(-20px) scale(1);
+    }
+    100% {
+        transform: translateY(-100vh) translateX(-40px) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Sea Creatures */
+.sea-creatures {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.fish, .starfish, .seahorse {
+    position: absolute;
+    font-size: 2rem;
+    animation: swimAround 15s ease-in-out infinite;
+}
+
+.fish-1 {
+    top: 20%;
+    left: -10%;
+    animation-delay: 0s;
+    animation-duration: 12s;
+}
+
+.fish-2 {
+    top: 60%;
+    right: -10%;
+    animation-delay: 4s;
+    animation-duration: 14s;
+    animation-direction: reverse;
+}
+
+.fish-3 {
+    top: 40%;
+    left: -15%;
+    animation-delay: 8s;
+    animation-duration: 16s;
+}
+
+.starfish {
+    bottom: 30%;
+    left: 10%;
+    animation: starTwinkle 3s ease-in-out infinite;
+}
+
+.seahorse {
+    bottom: 40%;
+    right: 15%;
+    animation: seahorseDance 4s ease-in-out infinite;
+}
+
+@keyframes swimAround {
+    0% { transform: translateX(0) scaleX(1); }
+    25% { transform: translateX(25vw) scaleX(1); }
+    50% { transform: translateX(50vw) scaleX(-1); }
+    75% { transform: translateX(75vw) scaleX(-1); }
+    100% { transform: translateX(100vw) scaleX(-1); }
+}
+
+@keyframes starTwinkle {
+    0%, 100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+    50% { transform: scale(1.2) rotate(180deg); filter: brightness(1.5); }
+}
+
+@keyframes seahorseDance {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-10px) rotate(5deg); }
+    75% { transform: translateY(10px) rotate(-5deg); }
+}
+
+/* Responsive Design for Loading Screen */
+@media (max-width: 768px) {
+    .loading-title {
+        font-size: 2rem;
+    }
+    
+    .loading-subtitle {
+        font-size: 1rem;
+    }
+    
+    .loading-ship {
+        margin-bottom: 2rem;
+    }
+    
+    .ship-svg {
+        width: 100px;
+        height: 75px;
+    }
+    
+    .treasure-progress {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .progress-bar {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .fish, .starfish, .seahorse {
+        font-size: 1.5rem;
+    }
+}

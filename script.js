@@ -51,12 +51,34 @@ function animateCounters() {
 // Initialize animations
 window.addEventListener('scroll', reveal);
 window.addEventListener('DOMContentLoaded', () => {
-    reveal();
-    setTimeout(animateCounters, 1000);
-    initBubbleTrail(); // Initialize bubble trail
-    createOceanElements(); // Initialize ocean elements
-    initFollowingShip(); // Initialize following ship
+    // Wait a bit for loading screen to finish before initializing other elements
+    setTimeout(() => {
+        reveal();
+        setTimeout(animateCounters, 1000);
+        initBubbleTrail(); // Initialize bubble trail
+        createOceanElements(); // Initialize ocean elements
+        initFollowingShip(); // Initialize following ship
+        initLogoFlip(); // Initialize logo flip animation
+        initTreasureChest(); // Initialize treasure chest
+    }, 4000); // Wait 4 seconds to let loading screen complete
 });
+
+// Logo flip animation
+function initLogoFlip() {
+    const logoFlip = document.getElementById('logoFlip');
+    if (!logoFlip) return;
+    
+    logoFlip.addEventListener('click', () => {
+        // Add coin sound for pirate theme when flipping
+        const coinSound = new Audio('data:audio/mp3;base64,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AwCnIT1iQVXOqMEgOnf///+qHR5CpwJAbI2MJ//+mGQCAMdb9binZR4g85/3//9aCg61x9jYFoOZiAlJXSitxf6atf////UAY6AAQEgKkf///UHAFIbe8YcYBFQzf/DMH+SVAX7FkvTAsFHEFaTUkIAwm///9MAA+vv/owAxYWnK+sDEClr8fP////+kQEwNdlhlC8sAJFshO//XDIKrjV//+2EAAAAAyQUc94xkZFwg477xCUhJlBRz3jGQCUoCjrvLI5C1921y/C////+uGQFdVpdWZgPAxAQhClpZbqf///7wECQQowhBkJm5A5WWiP//qBgEA4ldYc0PrB4OCtf//+sEA+pv3GACDn8aLiASAi////1gAE7YG/2A3BrmEyTMvDLBARd7S4pX////6AGGkFCACgFQ/////UEAJobe8YyYBFQzd/wwH+kCgYAgmKzC24gqSSzEgPBZP//9MAA+vvf9GAEQTnK+sDEClfL/6AAUwGQ1tl7YBIH//7YQAAAAAzwQdd4ZGYEyAg67yiUhIzBBz3jEYwUUCjvvLIgLlj5kCwCLKRkgiMtQP////SD4amlJMDAGSDCUlYcTQGBJQJr1f///+mGAHHyRh+PhhFQzf/B4P9IPhuMbd6fiwiCmgI0vT////WGIVSpts/tgQAeUjyVZeGAkB1rVuJV////rBQaBoQwQARD/////UEAJondMY0QBFQ3vPB4P9IBAgEgkKz+QaiQpZA0Agsr///TAAfX3j/VABEEZyvrAxApXp/9QEB18DOlpZXWCoClmhNX/QB0Zkjo47o0//thAAAAAC9QUcd4ZGYEhgo47yyVgJDBR13hkkgUKCjrvDJYDlvX///VBQAhC4/j4YiIZjcwPD/aB4buqGj0/EhEJtARoI3///sBEFUfbZ/LAoA8JHkqy8EBIDW1SkSrX////WCg0DQhggAiHX/////UEAJondMY0QBFQ3vPB4P9IBAgEgkKz+QaiQpZA0Agsr///TAAfX3j/VMBEEZyvrAxApXp/9QGB18DOlpZXWCoClmhNX/QB0Zkjo47o0//thAAAAAC7wUcd4ZLIEhgo47wyUAJIBR13hkogSOCjrvLJQDqj3NIwADAwIIBIl8FZLbQDYTv////rA4Ahw4/j4YiIZjcwPD/SAQLpSen0/FkxQhnAI4EZ////WCQYAm+2uzAuB9JHkqy8EIIG9pVIlGv////WCg0DQhggAiHX/////UEAJondMY0QBFQ3vPB4P9IBAgEgkKz+QaiQpZA0Agsr///TAAfX3j/VMBEEZyvrAxApXp/9QMBLWgJA5ZSF///6wMHhFBQH/+2EAAAAAKEFD3hktASGDDnvOJQAkYFnPeSRCBIQMOe8Ydaxy///TBcTvqGj1IXIkAiAM4A3Aj////rBIMAFvttdmB0DqR/JYLwQUgN7eqRqNZ////WCg0DQhggAiH/////UEAJondMY0QBFQ3vPB4P9IBAgEgkKz+QaiQpZA0Agsr///TAAfX3j/VMBEEZyvrAxApXp/9QMButAMByyMP////WBg8IoKAf/+gGwBMUYgH///SA4b1Nf6QYBmQ6AH///6INhYl7YAcD6SPJYLwQUgM7eqRkFX///9YKD/+2EAAAAACgwQd54ZKYEwgo46ICUAiMFHPeISyBIYKMe8MlkCQFC0IYIAIFf/////UEAJpHNMYyYA2QzvPBwP9IBAgEgkKz+QaiQpZA0Agsr///TAAfX3j/UBBEEZyrpAxApXp/9QMBLWgJA5ZSF///6wMHhFBQH//oBsATFGIB////SA4b1Nf6QYBmQ6AH///6INhYl7YAcD6Rl0C8EDBnb1SMgq6///rBQbBoQwQARDr/////UEAJondUYyYAygzvPBwP9IBAgEQkKz+QaiQTZA0Agsr///VAAfX//+2EAAAAACMQQZ94xk4EhAg57zjIAJCBBj3jGTASGCDHvBJSAziXtgBgPpI8lgvBF0BnX1SMgq6///rA4NiKCQP//oBoATFGIB////SA4b1Nf6QYBmQ6AGr///6INhYl7YBcD6SKtAXgjCAbX1SNov////WCg2IoKA//9AOACYowAP///0gMG9TX+kLAzIdADV///QDYjS1tlw6BJAZJjhMV2///+2EAAAAAAAQZZ94ZKIEhAg47ziWQJCBBz3jGRgUCB7HvMIoDyEMEAEQ6//+gHgBMUYgH///SA4b1Nf6QoAWQ6AGr///6INhYr5YAgD0hJjwMVVZr///pAwWEUZA//9ANgCZuYgH///0gMG9TX+EMAzQdADV///QDYFpb7KwVQJ8gS/X//6B4LiKMQf//QDoAmbmIA////SAwbtNf6QoPlA6AGr///6AdEaWttdg0BJBZJjhMV2/////////////////////////////////////////////////////////////////////////7YQAAAAARMCjHvJIIgkIF2veEVQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/7YQAAAAARICjvvJIQgkIGWPeEUwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//thAAAAABCgIOe8kwCCQAic94pkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/+2EAAAAAD/AA57yjIAH8AB/3lGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+        );
+        coinSound.volume = 0.3;
+        coinSound.play();
+        
+        // Toggle the flipped class
+        logoFlip.classList.toggle('flipped');
+    });
+}
 
 // Mouse bubble trail animation
 function initBubbleTrail() {
@@ -438,3 +460,346 @@ function initFollowingShip() {
 
     animateShip();
 }
+
+// Initialize Treasure Chest functionality
+function initTreasureChest() {
+    const treasureChest = document.getElementById('treasureChest');
+    const customerInfo = document.getElementById('customerInfo');
+    const coins = document.querySelectorAll('.coin');
+    const infoClose = document.querySelector('.info-close');
+    
+    if (!treasureChest || !customerInfo) return;
+    
+    // Customer data
+    const customers = {
+        rahul: {
+            name: "Rahul Sharma",
+            role: "Full Stack Developer",
+            story: "Started as a complete beginner and transformed into a confident full-stack developer through INLIGHN TECH's comprehensive program. Now working at a leading tech company.",
+            skills: ["React", "Node.js", "MongoDB", "JavaScript", "Express.js"],
+            achievement: "Landed a Full Stack Developer role at TechCorp with 60% salary increase"
+        },
+        priya: {
+            name: "Priya Patel",
+            role: "Data Scientist",
+            story: "Transitioned from a traditional finance background to data science through INLIGHN TECH's hands-on approach. Mastered analytics and machine learning concepts.",
+            skills: ["Python", "Machine Learning", "Power BI", "Tableau", "SQL"],
+            achievement: "Secured Data Scientist position at Analytics Plus with 80% salary jump"
+        },
+        amit: {
+            name: "Amit Kumar",
+            role: "Software Engineer",
+            story: "Fresh graduate who gained industry-ready skills through practical projects and mentorship. Built multiple real-world applications during the internship.",
+            skills: ["Java", "Spring Boot", "React", "MySQL", "AWS"],
+            achievement: "Got placed at Microsoft as Software Engineer straight after graduation"
+        },
+        sneha: {
+            name: "Sneha Reddy",
+            role: "Project Manager",
+            story: "Enhanced leadership and technical skills through INLIGHN TECH's project management program. Led multiple successful team projects and learned Agile methodologies.",
+            skills: ["Agile", "Scrum", "Jira", "Team Leadership", "Business Analysis"],
+            achievement: "Promoted to Senior Project Manager with 70% salary increase"
+        },
+        vikram: {
+            name: "Vikram Singh",
+            role: "DevOps Engineer",
+            story: "Learned cutting-edge DevOps practices and cloud technologies. Gained hands-on experience with deployment pipelines and infrastructure management.",
+            skills: ["Docker", "Kubernetes", "AWS", "Jenkins", "Terraform"],
+            achievement: "Landed DevOps Engineer role at CloudTech Solutions"
+        },
+        kavya: {
+            name: "Kavya Nair",
+            role: "UI/UX Designer",
+            story: "Developed creative and technical skills in user experience design. Created stunning interfaces and learned user research methodologies.",
+            skills: ["Figma", "Adobe XD", "Prototyping", "User Research", "HTML/CSS"],
+            achievement: "Joined Google as UI/UX Designer after completing the program"
+        }
+    };
+    
+    // Treasure chest click handler
+    treasureChest.addEventListener('click', function() {
+        if (!this.classList.contains('open')) {
+            // Open the chest
+            this.classList.add('open');
+            
+            // Play treasure opening sound
+            playTreasureSound();
+            
+            // Add sparkle effects
+            setTimeout(() => {
+                createSparkles();
+            }, 800);
+        }
+    });
+    
+    // Coin hover handlers
+    coins.forEach(coin => {
+        coin.addEventListener('mouseenter', function() {
+            if (treasureChest.classList.contains('open')) {
+                const customerId = this.getAttribute('data-customer');
+                const customer = customers[customerId];
+                
+                if (customer) {
+                    showCustomerInfo(customer);
+                    playCoinSound();
+                }
+            }
+        });
+    });
+    
+    // Info card close handler
+    if (infoClose) {
+        infoClose.addEventListener('click', function() {
+            hideCustomerInfo();
+        });
+    }
+    
+    // Close info card when clicking outside
+    customerInfo.addEventListener('click', function(e) {
+        if (e.target === this) {
+            hideCustomerInfo();
+        }
+    });
+    
+    // ESC key to close info card
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && customerInfo.classList.contains('show')) {
+            hideCustomerInfo();
+        }
+    });
+    
+    // Show customer info
+    function showCustomerInfo(customer) {
+        const nameEl = customerInfo.querySelector('.customer-name');
+        const roleEl = customerInfo.querySelector('.customer-role');
+        const storyEl = customerInfo.querySelector('.customer-story');
+        const skillsEl = customerInfo.querySelector('.skills-list');
+        const achievementEl = customerInfo.querySelector('.achievement-text');
+        
+        if (nameEl) nameEl.textContent = customer.name;
+        if (roleEl) roleEl.textContent = customer.role;
+        if (storyEl) storyEl.textContent = customer.story;
+        if (achievementEl) achievementEl.textContent = customer.achievement;
+        
+        // Populate skills
+        if (skillsEl) {
+            skillsEl.innerHTML = '';
+            customer.skills.forEach(skill => {
+                const skillTag = document.createElement('span');
+                skillTag.className = 'skill-tag';
+                skillTag.textContent = skill;
+                skillsEl.appendChild(skillTag);
+            });
+        }
+        
+        // Show the info card with animation
+        customerInfo.classList.add('show');
+    }
+    
+    // Hide customer info
+    function hideCustomerInfo() {
+        customerInfo.classList.remove('show');
+    }
+    
+    // Play treasure opening sound
+    function playTreasureSound() {
+        // Create treasure opening sound effect
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playNote(frequency, duration, delay = 0) {
+            setTimeout(() => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'triangle';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            }, delay);
+        }
+        
+        // Treasure opening melody
+        playNote(523.25, 0.3, 0);    // C5
+        playNote(659.25, 0.3, 150);  // E5
+        playNote(783.99, 0.5, 300);  // G5
+    }
+    
+    // Play coin hover sound
+    function playCoinSound() {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.2);
+    }
+    
+    // Create additional sparkle effects
+    function createSparkles() {
+        const sparkleContainer = treasureChest.querySelector('.sparkles');
+        if (!sparkleContainer) return;
+        
+        // Create temporary sparkles for extra effect
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle temp-sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                
+                sparkleContainer.appendChild(sparkle);
+                
+                // Remove temporary sparkle after animation
+                setTimeout(() => {
+                    if (sparkle.parentNode) {
+                        sparkle.parentNode.removeChild(sparkle);
+                    }
+                }, 3000);
+            }, i * 100);
+        }
+    }
+}
+
+// Ocean Loading Screen functionality
+function initLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    const progressFill = document.getElementById('progressFill');
+    const progressPercent = document.getElementById('progressPercent');
+    const loadingText = document.getElementById('loadingText');
+    
+    if (!loadingScreen || !progressFill || !progressPercent || !loadingText) return;
+    
+    // Loading messages that change during the loading process
+    const loadingMessages = [
+        "Preparing your journey...",
+        "Charting the course...",
+        "Hoisting the sails...",
+        "Loading treasures...",
+        "Gathering the crew...",
+        "Setting sail for adventure...",
+        "Almost ready to explore...",
+        "Welcome aboard, matey!"
+    ];
+    
+    let progress = 0;
+    let messageIndex = 0;
+    
+    // Simulate loading progress
+    const loadingInterval = setInterval(() => {
+        // Increment progress (random speed to make it feel more natural)
+        const increment = Math.random() * 3 + 1;
+        progress = Math.min(progress + increment, 100);
+        
+        // Update progress bar
+        progressFill.style.width = progress + '%';
+        progressPercent.textContent = Math.floor(progress) + '%';
+        
+        // Update loading message based on progress
+        const newMessageIndex = Math.floor((progress / 100) * (loadingMessages.length - 1));
+        if (newMessageIndex !== messageIndex && newMessageIndex < loadingMessages.length) {
+            messageIndex = newMessageIndex;
+            loadingText.textContent = loadingMessages[messageIndex];
+            
+            // Add a little animation to the text change
+            loadingText.style.animation = 'none';
+            setTimeout(() => {
+                loadingText.style.animation = 'fadeInOut 3s ease-in-out infinite';
+            }, 50);
+        }
+        
+        // Complete loading
+        if (progress >= 100) {
+            clearInterval(loadingInterval);
+            
+            // Final message
+            loadingText.textContent = loadingMessages[loadingMessages.length - 1];
+            
+            // Hide loading screen after a short delay
+            setTimeout(() => {
+                hideLoadingScreen();
+            }, 1500);
+        }
+    }, 150); // Update every 150ms for smooth animation
+    
+    // Function to hide loading screen
+    function hideLoadingScreen() {
+        loadingScreen.classList.add('hide');
+        
+        // Remove loading screen from DOM after transition
+        setTimeout(() => {
+            if (loadingScreen.parentNode) {
+                loadingScreen.parentNode.removeChild(loadingScreen);
+            }
+        }, 800);
+        
+        // Enable body scrolling
+        document.body.style.overflow = 'auto';
+    }
+    
+    // Prevent body scroll while loading
+    document.body.style.overflow = 'hidden';
+    
+    // Minimum loading time of 3 seconds (even if content loads faster)
+    const minLoadTime = 3000;
+    const startTime = Date.now();
+    
+    // Wait for page to actually load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLoadComplete();
+        });
+    } else {
+        checkLoadComplete();
+    }
+    
+    function checkLoadComplete() {
+        // Wait for images and other resources
+        if (document.readyState === 'complete') {
+            ensureMinimumLoadTime();
+        } else {
+            window.addEventListener('load', ensureMinimumLoadTime);
+        }
+    }
+    
+    function ensureMinimumLoadTime() {
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, minLoadTime - elapsedTime);
+        
+        // If minimum time hasn't passed, wait for it
+        if (remainingTime > 0) {
+            setTimeout(() => {
+                // Force progress to complete if it hasn't already
+                if (progress < 100) {
+                    progress = 100;
+                    progressFill.style.width = '100%';
+                    progressPercent.textContent = '100%';
+                    loadingText.textContent = loadingMessages[loadingMessages.length - 1];
+                    
+                    setTimeout(() => {
+                        hideLoadingScreen();
+                    }, 1000);
+                }
+            }, remainingTime);
+        }
+    }
+}
+
+// Initialize loading screen immediately
+initLoadingScreen();

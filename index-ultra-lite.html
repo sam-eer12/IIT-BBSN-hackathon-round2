@@ -9,6 +9,92 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
 </head>
 <body>
+    <!-- Ocean Themed Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="ocean-loading-bg">
+            <!-- Animated waves -->
+            <div class="wave wave-1"></div>
+            <div class="wave wave-2"></div>
+            <div class="wave wave-3"></div>
+            <div class="wave wave-4"></div>
+            
+            <!-- Loading content -->
+            <div class="loading-content">
+                <!-- Sailing ship animation -->
+                <div class="loading-ship">
+                    <svg width="120" height="90" viewBox="0 0 120 90" class="ship-svg">
+                        <!-- Ship hull -->
+                        <path d="M25,50 L95,50 L105,70 L15,70 Z" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+                        <!-- Mast -->
+                        <rect x="57" y="15" width="6" height="35" fill="#654321"/>
+                        <!-- Main sail -->
+                        <path d="M63,20 C85,25 85,40 63,45 L63,20 Z" fill="#F5F5DC" stroke="#D2B48C" stroke-width="1"/>
+                        <!-- Flag -->
+                        <path d="M63,15 L80,18 L80,25 L63,22 Z" fill="#FF6B6B"/>
+                        <!-- Ship details -->
+                        <circle cx="40" cy="60" r="3" fill="#FFD700"/>
+                        <circle cx="80" cy="60" r="3" fill="#FFD700"/>
+                        <!-- Company name on ship -->
+                        <text x="60" y="65" font-size="8" text-anchor="middle" fill="#FFD700" font-weight="bold">INLIGHN</text>
+                    </svg>
+                    
+                    <!-- Ship wake -->
+                    <div class="ship-wake">
+                        <div class="wake-line wake-line-1"></div>
+                        <div class="wake-line wake-line-2"></div>
+                        <div class="wake-line wake-line-3"></div>
+                    </div>
+                </div>
+                
+                <!-- Loading text and progress -->
+                <div class="loading-text-container">
+                    <h2 class="loading-title">Setting Sail...</h2>
+                    <div class="loading-subtitle" id="loadingText">Preparing your journey</div>
+                    
+                    <!-- Treasure chest progress bar -->
+                    <div class="treasure-progress">
+                        <div class="treasure-chest-mini">
+                            <div class="mini-chest-body"></div>
+                            <div class="mini-chest-lid"></div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                            <div class="progress-coins">
+                                <div class="progress-coin"></div>
+                                <div class="progress-coin"></div>
+                                <div class="progress-coin"></div>
+                                <div class="progress-coin"></div>
+                                <div class="progress-coin"></div>
+                            </div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="progressPercent">0%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Floating elements -->
+                <div class="loading-bubbles">
+                    <div class="loading-bubble"></div>
+                    <div class="loading-bubble"></div>
+                    <div class="loading-bubble"></div>
+                    <div class="loading-bubble"></div>
+                    <div class="loading-bubble"></div>
+                    <div class="loading-bubble"></div>
+                </div>
+                
+                <!-- Sea creatures -->
+                <div class="sea-creatures">
+                    <div class="fish fish-1">🐠</div>
+                    <div class="fish fish-2">🐟</div>
+                    <div class="fish fish-3">🦈</div>
+                    <div class="starfish">⭐</div>
+                    <div class="seahorse">🦄</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Hidden Pirate Treasures (Easter Eggs) -->
     <div id="pirate-treasures" style="display: none;">
         <div class="treasure" data-id="map" data-value="50"></div>
@@ -74,12 +160,18 @@
                 </div>
                 
                 <!-- Right Side - Visual Elements -->
-                <div class="slide-in-right" style="position: relative; height: 500px; display: flex; align-items: center; justify-content: center;">
-                    <!-- Main Logo -->
-                    <div style="position: relative; z-index: 2;">
-                        <img src="inlighn-tech-logo.png" alt="INLIGHN TECH" class="float" 
-                             style="width: 200px; height: 200px; border-radius: 50%; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);">
-                        <div class="pulse" style="position: absolute; inset: 0; background: linear-gradient(45deg, rgba(0, 102, 255, 0.2), rgba(0, 102, 255, 0.1)); border-radius: 50%;"></div>
+                <div class="slide-in-right" style="position: relative; height: 500px; display: flex; align-items: center; justify-content: center;">                <!-- Main Logo with Flip Animation -->
+                    <div class="logo-container" style="position: relative; z-index: 2;">
+                        <div class="logo-flip" id="logoFlip">
+                            <div class="logo-front float">
+                                <img src="inlighn-tech-logo.png" alt="INLIGHN TECH" 
+                                     style="width: 200px; height: 200px; border-radius: 50%; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);">
+                            </div>
+                            <div class="logo-back">
+                                <img src="adobe-express-qr-code.png" alt="QR Code">
+                            </div>
+                        </div>
+                        <div class="pulse-effect"></div>
                     </div>
                     
                     <!-- Floating Tech Cards -->
@@ -295,6 +387,92 @@
         </div>
     </section>
 
+    <!-- Interactive Treasure Chest Customer Section -->
+    <section id="customers" class="section treasure-section">
+        <div class="container">
+            <h2 class="section-title fade-in">
+                OUR TREASURE TROVE<br>
+                OF SUCCESS STORIES
+            </h2>
+            <p class="subtitle fade-in">
+                Discover the journey of our amazing students who found their treasure through INLIGHN TECH programs.
+                Click the treasure chest to reveal their stories!
+            </p>
+            
+            <div class="treasure-chest-container">
+                <div class="treasure-chest" id="treasureChest">
+                    <div class="chest-lid">
+                        <div class="chest-lock"></div>
+                        <div class="chest-hinge-left"></div>
+                        <div class="chest-hinge-right"></div>
+                    </div>
+                    <div class="chest-body">
+                        <div class="chest-keyhole"></div>
+                        <div class="chest-corner chest-corner-tl"></div>
+                        <div class="chest-corner chest-corner-tr"></div>
+                        <div class="chest-corner chest-corner-bl"></div>
+                        <div class="chest-corner chest-corner-br"></div>
+                    </div>
+                    
+                    <!-- Customer Coins -->
+                    <div class="customer-coins">
+                        <div class="coin" data-customer="rahul">
+                            <div class="coin-face coin-front">R</div>
+                            <div class="coin-face coin-back">💼</div>
+                        </div>
+                        <div class="coin" data-customer="priya">
+                            <div class="coin-face coin-front">P</div>
+                            <div class="coin-face coin-back">📊</div>
+                        </div>
+                        <div class="coin" data-customer="amit">
+                            <div class="coin-face coin-front">A</div>
+                            <div class="coin-face coin-back">💻</div>
+                        </div>
+                        <div class="coin" data-customer="sneha">
+                            <div class="coin-face coin-front">S</div>
+                            <div class="coin-face coin-back">🚀</div>
+                        </div>
+                        <div class="coin" data-customer="vikram">
+                            <div class="coin-face coin-front">V</div>
+                            <div class="coin-face coin-back">⚡</div>
+                        </div>
+                        <div class="coin" data-customer="kavya">
+                            <div class="coin-face coin-front">K</div>
+                            <div class="coin-face coin-back">🎯</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sparkle Effects -->
+                    <div class="sparkles">
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                    </div>
+                </div>
+                
+                <!-- Customer Info Card -->
+                <div class="customer-info-card" id="customerInfo">
+                    <div class="info-content">
+                        <h3 class="customer-name"></h3>
+                        <p class="customer-role"></p>
+                        <p class="customer-story"></p>
+                        <div class="customer-skills">
+                            <h4>Skills Gained:</h4>
+                            <div class="skills-list"></div>
+                        </div>
+                        <div class="customer-achievement">
+                            <h4>Achievement:</h4>
+                            <p class="achievement-text"></p>
+                        </div>
+                    </div>
+                    <div class="info-close">&times;</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Testimonials Section -->
     <section class="section">
         <div class="container">
@@ -463,4 +641,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-   
