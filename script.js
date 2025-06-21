@@ -57,7 +57,12 @@ window.addEventListener('DOMContentLoaded', () => {
         setTimeout(animateCounters, 1000);
         initBubbleTrail(); // Initialize bubble trail
         createOceanElements(); // Initialize ocean elements
-        initFollowingShip(); // Initialize following ship
+        
+        // Only initialize ship if not skipped by page-specific script
+        if (!window.skipMainShipInit) {
+            initFollowingShip(); // Initialize following ship
+        }
+        
         initLogoFlip(); // Initialize logo flip animation
         initTreasureChest(); // Initialize treasure chest
         initVisionGoalsAnimation(); // Initialize vision & goals scroll animations
