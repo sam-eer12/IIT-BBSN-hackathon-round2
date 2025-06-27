@@ -1100,11 +1100,11 @@ function initVisionGoalsAnimation() {
         document.head.appendChild(style);
     }
     
-    // Initialize all enhancements
+   
     revealTextAnimation();
     initEnhancedHoverEffects();
     
-    // Smooth entry animation for the entire section
+   
     const visionGoalsSection = document.querySelector('.vision-goals-section');
     if (visionGoalsSection) {
         const sectionObserver = new IntersectionObserver((entries) => {
